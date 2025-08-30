@@ -25,14 +25,22 @@ public class Pathfinding : MonoBehaviour
 
     public List<Vector3> getWorldPath()
     {
-        if (gridManager == null) return null;
+        if (gridManager == null)
+        {
+            Debug.Log("Grid Manager is null");
+            return null;
+        }
 
         List<Vector2Int> gridPath = FindPath(
             gridManager.GetGridPosition(startPosition.transform.position),
             gridManager.GetGridPosition(goalPosition.transform.position)
         );
 
-        if (gridPath == null) return null;
+        if (gridPath == null)        
+        {
+            //Debug.Log("gridPath is null");
+            return null;
+        }
 
         List<Vector3> worldPath = new List<Vector3>();
         foreach (var gridPos in gridPath)
@@ -44,7 +52,11 @@ public class Pathfinding : MonoBehaviour
 
     public List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
     {
-        if (gridManager == null) return null;
+        if (gridManager == null)
+        {
+            Debug.Log("Grid Manager is null");
+            return null;
+        }
 
         List<Node> openList = new List<Node>();
         HashSet<Vector2Int> closedSet = new HashSet<Vector2Int>();

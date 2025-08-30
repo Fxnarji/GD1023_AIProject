@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -6,19 +7,25 @@ public class Enemy : MonoBehaviour
     public int health = 100;
     public float speed = 2f;
     public Pathfinding pathfinding;
-    private List<Vector3> path;
+    public List<Vector3> path;
+    public bool test;
     private int currentTargetIndex = 0;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    void Start()
+    IEnumerator Start()
     {
+        // wait one frame to ensure all Start() methods ran
+        yield return null;
+
         if (pathfinding != null)
-            GetPath();
-        else
-            Debug.LogError("No Pathfinding component found in scene!");
+        {
+            path = pathfinding.getWorldPath();
+            Debug.Log("Path length: " + (path != null ? path.Count.ToString() : "null"));
+        }
     }
+
 
 
 
@@ -34,7 +41,6 @@ public class Enemy : MonoBehaviour
         if (pathfinding == null) return;
         path = pathfinding.getWorldPath();
         Debug.Log(path.Count);
-
     }
 
 

@@ -27,10 +27,7 @@ public class GridManager : MonoBehaviour
     {
         UpdateIsWalkable();
     }
-    void Update()
-    {
-        UpdateIsWalkable();
-    }
+
     public Vector3 getWorldPosition(Vector2Int GridPos)
     {
         Vector3 gridOrigin = gridOriginObject.transform.position;
@@ -66,6 +63,7 @@ public class GridManager : MonoBehaviour
 
     public void UpdateIsWalkable()
     {
+        Debug.Log("Updated CellStates");
         CellStateArray = new CellState[gridLengthX, gridLengthY];
 
         for (int x = 0; x < gridLengthX; x++)

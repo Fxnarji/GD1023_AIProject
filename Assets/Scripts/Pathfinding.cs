@@ -19,15 +19,27 @@ public class Pathfinding : MonoBehaviour
     public GameObject startPosition;
     public GameObject goalPosition;
     public GridManager gridManager;
+    public bool displayPath = true;
 
 
-    [ContextMenu("Find Path")]
-    public void ShowPath()
+
+    public List<Vector3> getWorldPath()
     {
-        FindPath(
+        if (gridManager == null) return null;
+
+        List<Vector2Int> gridPath = FindPath(
             gridManager.GetGridPosition(startPosition.transform.position),
             gridManager.GetGridPosition(goalPosition.transform.position)
         );
+
+        if (gridPath == null) return null;
+
+        List<Vector3> worldPath = new List<Vector3>();
+        foreach (var gridPos in gridPath)
+        {
+            worldPath.Add(gridManager.getWorldPosition(gridPos));
+        }
+        return worldPath;
     }
 
     public List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
@@ -143,22 +155,23 @@ public class Pathfinding : MonoBehaviour
         return neighbors;
     }
 
+
+//debug here:
+
     public void OnDrawGizmos()
     {
         if (gridManager == null) return;
+        if (!displayPath) return;
 
-        List<Vector2Int> path = FindPath(
-            gridManager.GetGridPosition(startPosition.transform.position),
-            gridManager.GetGridPosition(goalPosition.transform.position)
-        );
+        List<Vector3> path = getWorldPath();
 
         if (path != null)
         {
             Gizmos.color = Color.cyan;
             for (int i = 0; i < path.Count - 1; i++)
             {
-                Vector3 start = gridManager.getWorldPosition(path[i]);
-                Vector3 end   = gridManager.getWorldPosition(path[i + 1]);
+                Vector3 start = path[i];
+                Vector3 end = path[i + 1];
                 Gizmos.DrawLine(start, end);
             }
         }

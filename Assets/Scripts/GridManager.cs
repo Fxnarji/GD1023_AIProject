@@ -1,5 +1,5 @@
 using UnityEngine;
-
+[ExecuteAlways]
 public class GridManager : MonoBehaviour
 {
 
@@ -23,9 +23,11 @@ public class GridManager : MonoBehaviour
         public bool underAttack = false;
     }
     public CellState[,] CellStateArray;
-
-    [ContextMenu("Update Arrays")]
-    public void Start()
+    void Start()
+    {
+        UpdateIsWalkable();
+    }
+    void Update()
     {
         UpdateIsWalkable();
     }
@@ -51,13 +53,16 @@ public class GridManager : MonoBehaviour
 
     public bool isWalkable(Vector2Int gridPos)
     {
+        if (CellStateArray == null) return false; // safe default
         return CellStateArray[gridPos.x, gridPos.y].isWalkable;
     }
 
     public bool isUnderAttack(Vector2Int gridPos)
     {
+        if (CellStateArray == null) return false; // safe default
         return CellStateArray[gridPos.x, gridPos.y].underAttack;
     }
+
 
     public void UpdateIsWalkable()
     {
@@ -121,15 +126,14 @@ public class GridManager : MonoBehaviour
                 else
                     Gizmos.color = Color.red; // optional for blocked cells
 
-
-
-                Gizmos.DrawWireSphere(getWorldPosition(gridPos), 0.25f);
+                Gizmos.DrawSphere(getWorldPosition(gridPos), 0.25f);
             }
         }
     }
     private void OnDrawGizmos()
     {
         if (displayGrid == false) return;
+        if (CellStateArray == null) return;
         drawGrid();
 
     }
